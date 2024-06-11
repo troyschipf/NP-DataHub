@@ -9,42 +9,54 @@ const Plotly = dynamic(() => import("plotly.js-dist-min"), { ssr: false });
 
 export default function Home() {
 
-  const features = [
-    {
-      title: "Number of U.S. Nonprofits",
-      imgSrc: "/img/concierge_1250.png",
-      description: "1.7 Million"
-    },
-    {
-      title: "Radiology Report Analyzer",
-      imgSrc: "/img/concierge_1250.png",
-      description: "Velocity MIPS Reporter is powered by our patent pending Velocity AI engine. By continuously analyzing radiology reports, you receive real-time feedback of your MIPS scores throughout the year."
-    },
-    {
-      title: "MIPS Consulting",
-      imgSrc: "/img/concierge_1250.png",
-      description: "We host regular MACRA optimization sessions during the year to help your practice stay on track and allow faster intervention to optimize providers’ quality and financial performance."
-    },
-  ];
-
   useEffect(() => {
     const initializePlot = async () => {
       const Plotly = await import("plotly.js-dist-min");
 
-      const xArray = ["Italy", "France", "Spain", "USA", "Argentina"];
-      const yArray = [55, 49, 44, 24, 15];
+      const xArray = ["2018", "2019", "2020", "2021"];
+      const yArray1 = [10871740,10922769,9784965,13264528];
+      const yArray2 = [9748277,9645736,9352888,11179554];
+      const compared = [10871740/9748277,10922769/9645736,9784965/9352888,13264528/11179554];
 
-      const data = [{
-        x: xArray,
-        y: yArray,
-        type: "bar",
-        orientation: "v",
-        marker: { color: "rgba(0,0,255)" }
-      }];
+      const dataSeperate = [
+        {
+          x: xArray,
+          y: yArray1,
+          name: 'Revenue',
+          type: 'line',
+          marker: {
+            color: 'rgba(0, 50, 255, 1)' // Custom color for the first set of bars
+          }
+        },
+        {
+          x: xArray,
+          y: yArray2,
+          name: 'Expenses',
+          type: 'line',
+          marker: {
+            color: 'rgba(255, 0, 0, 1)' // Custom color for the first set of bars
+          }
+        }
+      ];
 
-      const layout = { title: "World Wide Wine Production" };
+      const layout = { title: "Historical Revenue vs. Expenses" };
 
-      Plotly.newPlot("myPlot", data, layout);
+      const dataCompared = [
+        {
+          x: xArray,
+          y: compared,
+          name: 'Revenue / Expenses',
+          type: 'line',
+          marker: {
+            color: 'rgba(0, 50, 255, 1)' // Custom color for the first set of bars
+          }
+        }
+      ];
+
+      const layout2 = { title: "Historical Revenue / Expenses" };
+
+      Plotly.newPlot("SeperateData", dataSeperate, layout);
+      Plotly.newPlot("ComparedData",dataCompared, layout2);
     };
 
     initializePlot();
@@ -57,8 +69,13 @@ export default function Home() {
       {/* Plotly Testing !!! */}
       <section className="min-h-screen bg-white text-gray-900 px-6 md:px-12 font-serif">
         <div className="flex flex-col justify-center items-center text-center py-40">
-          <h2 className="text-2xl md:text-5xl mb-4 md:mb-6">World Wide Wine Production</h2>
-          <div id="myPlot" style={{ width: "100%", height: "500px" }}></div>
+          <h2 className="text-2xl md:text-5xl mb-4 md:mb-6">Second Chance Inc.</h2>
+          <div id="SeperateData" style={{ width: "50%", height: "500px" }}></div>
+        </div>
+      </section>
+      <section className="min-h-screen bg-white text-gray-900 px-6 md:px-12 font-serif">
+        <div className="flex flex-col justify-center items-center text-center py-40">
+          <div id="ComparedData" style={{ width: "50%", height: "500px" }}></div>
         </div>
       </section>
     </div>
